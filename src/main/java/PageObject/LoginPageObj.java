@@ -8,28 +8,26 @@ public class LoginPageObj extends BaseWebUI {
     LoginPageUI loginPageUI;
 
     public void InvalidEmail() {
-        loginPageUI = new LoginPageUI();
-        setText(loginPageUI.EMAIL, "");
-        setText(loginPageUI.PASSWORD, "123456");
-        clickElement(loginPageUI.LOGIN);
-        clearText(loginPageUI.EMAIL);
-        clearText(loginPageUI.PASSWORD);
+        setValueLogin("", "123456");
+        ActionLogin();
     }
 
     public void InvalidPassword() {
-        loginPageUI = new LoginPageUI();
-        setText(loginPageUI.EMAIL, "huong14498@gmail.com");
-        setText(loginPageUI.PASSWORD, "");
-        clickElement(loginPageUI.LOGIN);
-        clearText(loginPageUI.EMAIL);
-        clearText(loginPageUI.PASSWORD);
+        setValueLogin("huong14498@gmail.com", "");
+        ActionLogin();
     }
 
+    public void InvalidEmailAndPass(){
+        setValueLogin("", "");
+        ActionLogin();
+    }
+
+    public void Invalid(){
+        setValueLogin("1111@gmail.com", "1111111");
+        ActionLogin();
+    }
     public void Login() {
-        loginPageUI = new LoginPageUI();
-        setText(loginPageUI.EMAIL, "huong14498@gmail.com");
-        setText(loginPageUI.PASSWORD, "123456");
-        clickElement(loginPageUI.LOGIN);
+        setValueLogin("huong14498@gmail.com", "123456");
     }
 
     public String getSignInPageTitle() {
@@ -44,5 +42,26 @@ public class LoginPageObj extends BaseWebUI {
 
     public LoginPageObj(WebDriver driver) {
         super(driver);
+    }
+
+    private void ActionLogin() {
+        clearText(loginPageUI.EMAIL);
+        clearText(loginPageUI.PASSWORD);
+    }
+
+    private void setValueLogin(String email, String password) {
+        loginPageUI = new LoginPageUI();
+        setText(loginPageUI.EMAIL, email);
+        setText(loginPageUI.PASSWORD, password);
+        clickElement(loginPageUI.LOGIN);
+    }
+
+    public String getText() {
+        String pageText = driver.findElement(loginPageUI.INVALID_LOGIN).getText();
+        return pageText;
+    }
+    public boolean CheckLogin(){
+        String expectedResult = "Invalid login or password.";
+        return getText().equals(expectedResult);
     }
 }
